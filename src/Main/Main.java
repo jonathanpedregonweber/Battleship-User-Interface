@@ -24,8 +24,9 @@ public class Main
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream())))
         {
             ServerHandler = new ServerHandler(socket);
-            UI = new UserInterface();
             ServerHandler.SendLoginMessage(GetUserName());
+            UI = new UserInterface();
+
 
             String serverInput = reader.readLine();
             System.out.println(serverInput);
