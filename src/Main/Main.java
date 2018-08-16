@@ -1,5 +1,7 @@
 package Main;
 
+import Main.Handlers.ServerHandler;
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,12 +16,18 @@ public class Main
     {
         String serverName = "ec2-18-207-150-67.compute-1.amazonaws.com";
         int port = 8989;
+        ServerHandler ServerHandler;
 
         System.out.println(GetUserName());
 
         try (Socket socket = new Socket(serverName, port);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream())))
         {
+            ServerHandler = new ServerHandler(socket);
+            ServerHandler.SendLoginMessage(GetUserName());
+
+            String serverInput = reader.readLine();
+            System.out.println(serverInput);
 
         } catch (UnknownHostException e)
         {
