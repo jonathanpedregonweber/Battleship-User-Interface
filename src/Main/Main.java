@@ -1,6 +1,7 @@
 package Main;
 
 import Main.Handlers.ServerHandler;
+import UserInterface.UserInterface;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -17,13 +18,13 @@ public class Main
         String serverName = "ec2-18-207-150-67.compute-1.amazonaws.com";
         int port = 8989;
         ServerHandler ServerHandler;
-
-        System.out.println(GetUserName());
+        UserInterface UI;
 
         try (Socket socket = new Socket(serverName, port);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream())))
         {
             ServerHandler = new ServerHandler(socket);
+            UI = new UserInterface();
             ServerHandler.SendLoginMessage(GetUserName());
 
             String serverInput = reader.readLine();
