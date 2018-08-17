@@ -243,4 +243,23 @@ public class UserInterface extends JFrame
             }
         }
     }
+
+    public void DisplayOpponentMove(Coordinates moveCoordinates, boolean hit)
+    {
+        Color newButtonColor;
+        if(hit)
+        {
+            newButtonColor = Color.RED;
+        }
+        else
+        {
+            newButtonColor = Color.BLUE;
+        }
+        UserButtons[moveCoordinates.YCoordinate][moveCoordinates.XCoordinate].setBackground(newButtonColor);
+    }
+
+    public void ShowLossMessage()
+    {
+        JOptionPane.showMessageDialog(null, "You Lost!");
+    }
 }

@@ -10,4 +10,9 @@ public class Coordinates
         XCoordinate = xCoordinate;
         YCoordinate = yCoordinate;
     }
+
+    public boolean Equals(Coordinates other)
+    {
+        return this.XCoordinate == other.XCoordinate && this.YCoordinate == other.YCoordinate;
+    }
 }

@@ -2,6 +2,7 @@ package Main;
 
 import Main.Handlers.ServerHandler;
 import Main.Models.*;
+import Models.Coordinates;
 import UserInterface.UserInterface;
 
 import javax.swing.*;
@@ -17,6 +18,8 @@ public class Main
     private static int Port = 8989;
     private ServerHandler ServerHandler;
     private UserInterface UI;
+    private int HitCount = 0;
+
     public static void main(String[] args)
     {
         Main program = new Main();
@@ -46,6 +49,11 @@ public class Main
                     break;
                 case "Hit":
                     HandleHitMessage(serverMessage);
+                    break;
+                case "Move":
+                    HandleMoveMessage(serverMessage);
+                    break;
+
 
             }
             if(serverMessage.type.equals("Chat"))
@@ -80,8 +88,45 @@ public class Main
         UI.ShowHit(hitMessage.hit);
     }
 
+    private void HandleMoveMessage(Message serverMessage)
+    {
+        MoveMessage moveMessage = (MoveMessage) serverMessage;
+        Coordinates moveCoordinates = new Coordinates(moveMessage.xCoordinate, moveMessage.yCoordinate);
+        Boolean isHit = IsHit(moveCoordinates);
+        UI.DisplayOpponentMove(moveCoordinates, isHit);
+        ServerHandler.SendHitMessage(isHit);
+        if(isHit)
+        {
+            HitCount++;
+            if(IsWin())
+            {
+                MessageFactory.getWinMessage();
+                ServerHandler.WinMessage();
+                UI.ShowLossMessage();
+            }
+        }
+
+    }
+
     private static String GetUserName()
     {
         return JOptionPane.showInputDialog(new JFrame(), "Enter your name: ");
+    }
+
+    private boolean IsHit(Coordinates moveCoordinates)
+    {
+        for(Coordinates coordinates : UI.ShipCoordinates)
+        {
+            if(coordinates.Equals(moveCoordinates))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean IsWin()
+    {
+        return HitCount == 17;
     }
 }
