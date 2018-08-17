@@ -159,22 +159,22 @@ public class UserInterface extends JFrame
         ShipCoordinates[8] = new Coordinates(5,3);
 
         //First 3 Ship
-        ShipCoordinates[9] = new Coordinates(7,10);
-        ShipCoordinates[10] = new Coordinates(8,10);
-        ShipCoordinates[11] = new Coordinates(9,10);
+        ShipCoordinates[9] = new Coordinates(7,9);
+        ShipCoordinates[10] = new Coordinates(8,9);
+        ShipCoordinates[11] = new Coordinates(9,9);
 
         //Second 3 Ship
-        ShipCoordinates[12] = new Coordinates(10,3);
-        ShipCoordinates[13] = new Coordinates(10,4);
-        ShipCoordinates[14] = new Coordinates(10,5);
+        ShipCoordinates[12] = new Coordinates(9,3);
+        ShipCoordinates[13] = new Coordinates(9,4);
+        ShipCoordinates[14] = new Coordinates(9,5);
 
         //2 Ship
-        ShipCoordinates[15] = new Coordinates(10,3);
-        ShipCoordinates[16] = new Coordinates(10,4);
+        ShipCoordinates[15] = new Coordinates(7,3);
+        ShipCoordinates[16] = new Coordinates(7,4);
 
         for(Coordinates coordinates: ShipCoordinates)
         {
-
+            HighlightUserButton(coordinates, Color.green);
         }
     }
 
@@ -184,15 +184,12 @@ public class UserInterface extends JFrame
         ChatReceived.setText(currentText + text);
     }
 
-    private void SelectUserButton(Coordinates buttonCoordinates)
+    public void HighlightUserButton(Coordinates buttonCoordinates, Color buttonColor)
     {
         int xCoordinate = buttonCoordinates.XCoordinate;
         int yCoordinate = buttonCoordinates.YCoordinate;
 
         UserButtons[yCoordinate][xCoordinate].setBackground(Color.BLUE);
-        UserButtons[yCoordinate][xCoordinate].setOpaque(true);
-        UserButtons[yCoordinate][xCoordinate].setBorderPainted(false);
-        UserButtons[yCoordinate][xCoordinate].setEnabled(true);
     }
 
 }
