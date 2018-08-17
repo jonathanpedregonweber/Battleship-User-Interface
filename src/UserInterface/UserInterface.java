@@ -1,11 +1,18 @@
 package UserInterface;
 
+import Main.Handlers.ServerHandler;
+import Main.Models.ChatMessage;
+import com.sun.security.ntlm.Server;
 import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.Socket;
 
 public class UserInterface extends JFrame
 {
@@ -16,9 +23,13 @@ public class UserInterface extends JFrame
     private TextArea ChatReceived;
     private TextArea ChatSend;
     private JButton SendChatButton;
+    private JButton StartGameButton;
+    private JButton RandomizeShipsButton;
+    private ServerHandler ServerHandler;
 
-    public UserInterface()
+    public UserInterface(Socket socket)
     {
+        ServerHandler = new ServerHandler(socket);
         JPanel boardPanel = new JPanel(new GridLayout(1,2));
         JPanel lowerPanel = new JPanel(new GridLayout(1,2));
         JPanel mainPanel = new JPanel(new GridLayout(2,1));
@@ -27,10 +38,11 @@ public class UserInterface extends JFrame
         boardPanel.add(OpponentPanel);
         boardPanel.add(UserPanel);
         lowerPanel.add(GetChatPanel());
+        lowerPanel.add(GetButtonPanel());
         mainPanel.add(boardPanel);
         mainPanel.add(lowerPanel);
 
-        setName("Battleship User Interface");
+
         setSize(1500,900);
         setContentPane(mainPanel);
         setVisible(true);
@@ -53,6 +65,7 @@ public class UserInterface extends JFrame
                 JButton playerButton = new JButton();
                 playerButton.setText(GetButtonText(column, row));
                 playerButton.setEnabled(false);
+                playerButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 3));
                 UserPanel.add(playerButton);
                 buttonArray[row][column] = new JButton();
             }
@@ -77,6 +90,7 @@ public class UserInterface extends JFrame
                 JButton opponentButton = new JButton();
                 opponentButton.setText(GetButtonText(column, row));
                 opponentButton.setEnabled(false);
+                opponentButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 3));
                 OpponentPanel.add(opponentButton);
                 buttonArray[row][column] = new JButton();
             }
@@ -97,10 +111,36 @@ public class UserInterface extends JFrame
         ChatReceived.setEnabled(false);
         ChatSend = new TextArea();
         SendChatButton = new JButton("Send Chat");
+        SendChatButton.addActionListener(e ->
+        {
+            String chatMessage = ChatSend.getText();
+            AppendToTextArea(chatMessage);
+            ServerHandler.SendChatMessage(chatMessage);
+            ChatSend.setText("");
+        });
         chatPanel.add(ChatReceived);
         chatPanel.add(ChatSend);
         chatPanel.add(SendChatButton);
         chatPanel.setBorder(new LineBorder(Color.BLUE, 7));
         return chatPanel;
     }
+
+    private JPanel GetButtonPanel()
+    {
+        JPanel buttonPanel = new JPanel(new GridLayout(6,1));
+        StartGameButton = new JButton("Start Game");
+        RandomizeShipsButton = new JButton("Randomize Ships");
+        RandomizeShipsButton.setEnabled(false);
+        buttonPanel.add(StartGameButton);
+        buttonPanel.add(RandomizeShipsButton);
+        buttonPanel.setBorder(new LineBorder(Color.BLUE, 7));
+        return buttonPanel;
+    }
+
+    public void AppendToTextArea(String text)
+    {
+        String currentText = ChatReceived.getText();
+        ChatReceived.setText(currentText + text);
+    }
+
 }

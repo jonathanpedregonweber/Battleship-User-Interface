@@ -1,6 +1,9 @@
 package Main;
 
 import Main.Handlers.ServerHandler;
+import Main.Models.ChatMessage;
+import Main.Models.Message;
+import Main.Models.MessageFactory;
 import UserInterface.UserInterface;
 
 import javax.swing.*;
@@ -25,10 +28,17 @@ public class Main
         {
             ServerHandler = new ServerHandler(socket);
             ServerHandler.SendLoginMessage(GetUserName());
-            UI = new UserInterface();
+            UI = new UserInterface(socket);
 
 
             String serverInput = reader.readLine();
+            Message serverMessage = MessageFactory.parse(serverInput);
+
+            if(serverMessage.type.equals("Chat"))
+            {
+                ChatMessage chat = (ChatMessage)  serverMessage;
+                UI.AppendToTextArea(chat.chatMessage);
+            }
             System.out.println(serverInput);
 
         } catch (UnknownHostException e)
