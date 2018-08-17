@@ -258,8 +258,8 @@ public class UserInterface extends JFrame
         UserButtons[moveCoordinates.YCoordinate][moveCoordinates.XCoordinate].setBackground(newButtonColor);
     }
 
-    public void ShowLossMessage()
+    public void ShowMessage(String message)
     {
-        JOptionPane.showMessageDialog(null, "You Lost!");
+        JOptionPane.showMessageDialog(null, message);
     }
 }

@@ -53,8 +53,12 @@ public class Main
                 case "Move":
                     HandleMoveMessage(serverMessage);
                     break;
-
-
+                case "Win":
+                    HandleWinMessage();
+                    break;
+                default:
+                    System.out.println(serverInput);
+                    break;
             }
             if(serverMessage.type.equals("Chat"))
             {
@@ -69,6 +73,11 @@ public class Main
         {
             e.printStackTrace();
         }
+    }
+
+    private void HandleWinMessage()
+    {
+        UI.ShowMessage("You won!");
     }
 
     private void HandleChatMessage(Message serverMessage)
@@ -102,7 +111,7 @@ public class Main
             {
                 MessageFactory.getWinMessage();
                 ServerHandler.WinMessage();
-                UI.ShowLossMessage();
+                UI.ShowMessage("You lost!");
             }
         }
 
