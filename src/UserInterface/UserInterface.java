@@ -219,4 +219,28 @@ public class UserInterface extends JFrame
             }
         }
     }
+
+    public void ShowHit(boolean hit)
+    {
+        for(int column = 0; column < 10; column++)
+        {
+            for(int row = 0; row < 10; row++)
+            {
+                Color buttonColor = OpponentButtons[row][column].getBackground();
+                if(buttonColor.equals(Color.YELLOW))
+                {
+                    Color newButtonColor;
+                    if(hit)
+                    {
+                        newButtonColor = Color.RED;
+                    }
+                    else
+                    {
+                        newButtonColor = Color.BLUE;
+                    }
+                    OpponentButtons[row][column].setBackground(newButtonColor);
+                }
+            }
+        }
+    }
 }

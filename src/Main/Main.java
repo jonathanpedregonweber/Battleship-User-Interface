@@ -1,9 +1,7 @@
 package Main;
 
 import Main.Handlers.ServerHandler;
-import Main.Models.ChatMessage;
-import Main.Models.Message;
-import Main.Models.MessageFactory;
+import Main.Models.*;
 import UserInterface.UserInterface;
 
 import javax.swing.*;
@@ -44,7 +42,11 @@ public class Main
                     HandleChatMessage(serverMessage);
                     break;
                 case "Start":
+                    HandleStartMessage(serverMessage);
                     break;
+                case "Hit":
+                    HandleHitMessage(serverMessage);
+
             }
             if(serverMessage.type.equals("Chat"))
             {
@@ -65,6 +67,17 @@ public class Main
     {
         ChatMessage chat = (ChatMessage)  serverMessage;
         UI.AppendToTextArea(chat.chatMessage);
+    }
+
+    private void HandleStartMessage(Message serverMessage)
+    {
+        UI.EnableOpponentButtons();
+    }
+
+    private void HandleHitMessage(Message serverMessage)
+    {
+        HitMessage hitMessage = (HitMessage) serverMessage;
+        UI.ShowHit(hitMessage.hit);
     }
 
     private static String GetUserName()
