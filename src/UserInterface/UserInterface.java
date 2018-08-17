@@ -1,17 +1,11 @@
 package UserInterface;
 
 import Main.Handlers.ServerHandler;
-import Main.Models.ChatMessage;
-import com.sun.security.ntlm.Server;
-import com.sun.xml.internal.messaging.saaj.soap.JpegDataContentHandler;
+import Models.Coordinates;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.Socket;
 
 public class UserInterface extends JFrame
@@ -26,6 +20,7 @@ public class UserInterface extends JFrame
     private JButton StartGameButton;
     private JButton RandomizeShipsButton;
     private ServerHandler ServerHandler;
+    public Coordinates[] ShipCoordinates;
 
     public UserInterface(Socket socket)
     {
@@ -129,13 +124,55 @@ public class UserInterface extends JFrame
     {
         JPanel buttonPanel = new JPanel(new GridLayout(6,1));
         StartGameButton = new JButton("Start Game");
-        StartGameButton.addActionListener(e -> ServerHandler.SendStartMessage());
+        StartGameButton.addActionListener(e ->
+        {
+            ServerHandler.SendStartMessage();
+            StartGameButton.setEnabled(false);
+            RandomizeShipsButton.setEnabled(true);
+        });
         RandomizeShipsButton = new JButton("Randomize Ships");
         RandomizeShipsButton.setEnabled(false);
+        RandomizeShipsButton.addActionListener(e -> SetShips());
         buttonPanel.add(StartGameButton);
         buttonPanel.add(RandomizeShipsButton);
         buttonPanel.setBorder(new LineBorder(Color.BLUE, 7));
         return buttonPanel;
+    }
+
+    private void SetShips()
+    {
+        ShipCoordinates = new Coordinates[17];
+        //Carrier
+        ShipCoordinates[0] = new Coordinates(0,0);
+        UserButtons[0][0].setBackground(Color.BLUE);
+        UserButtons[0][0].setOpaque(true);
+        UserButtons[0][0].setBorderPainted(false);
+        UserButtons[0][0].setEnabled(true);
+        ShipCoordinates[1] = new Coordinates(0,1);
+        ShipCoordinates[2] = new Coordinates(0,2);
+        ShipCoordinates[3] = new Coordinates(0,3);
+        ShipCoordinates[4] = new Coordinates(0,4);
+
+        //4 Ship
+        ShipCoordinates[5] = new Coordinates(2,3);
+        ShipCoordinates[6] = new Coordinates(3,3);
+        ShipCoordinates[7] = new Coordinates(4,3);
+        ShipCoordinates[8] = new Coordinates(5,3);
+
+        //First 3 Ship
+        ShipCoordinates[9] = new Coordinates(7,10);
+        ShipCoordinates[10] = new Coordinates(8,10);
+        ShipCoordinates[11] = new Coordinates(9,10);
+
+        //Second 3 Ship
+        ShipCoordinates[12] = new Coordinates(10,3);
+        ShipCoordinates[13] = new Coordinates(10,4);
+        ShipCoordinates[14] = new Coordinates(10,5);
+
+        //2 Ship
+        ShipCoordinates[15] = new Coordinates(10,3);
+        ShipCoordinates[16] = new Coordinates(10,4);
+
     }
 
     public void AppendToTextArea(String text)
