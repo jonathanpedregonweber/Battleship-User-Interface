@@ -21,6 +21,7 @@ public class UserInterface extends JFrame
     private JButton RandomizeShipsButton;
     private ServerHandler ServerHandler;
     public Coordinates[] ShipCoordinates;
+    private Coordinates[] PlayerGuessCoordinates;
 
     public UserInterface(Socket socket)
     {
@@ -92,6 +93,7 @@ public class UserInterface extends JFrame
                 buttonArray[row][column] = new JButton();
             }
         }
+        PlayerGuessCoordinates = new Coordinates[100];
         return buttonArray;
     }
 
@@ -192,4 +194,29 @@ public class UserInterface extends JFrame
         UserButtons[yCoordinate][xCoordinate].setBackground(Color.BLUE);
     }
 
+    public void EnableOpponentButtons()
+    {
+        for(int column = 0; column < 10; column++)
+        {
+            for(int row = 0; row < 10; row++)
+            {
+                Color buttonColor = OpponentButtons[row][column].getBackground();
+                if(!buttonColor.equals(Color.RED) && !buttonColor.equals(Color.BLUE))
+                {
+                    OpponentButtons[row][column].setEnabled(true);
+                }
+            }
+        }
+    }
+
+    private void DisableOpponentButtons()
+    {
+        for(int column = 0; column < 10; column++)
+        {
+            for(int row = 0; row < 10; row++)
+            {
+                OpponentButtons[row][column].setEnabled(false);
+            }
+        }
+    }
 }
