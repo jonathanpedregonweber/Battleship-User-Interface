@@ -15,15 +15,19 @@ import java.net.UnknownHostException;
 
 public class Main
 {
-
+    private static String ServerName = "ec2-18-207-150-67.compute-1.amazonaws.com";
+    private static int Port = 8989;
+    private ServerHandler ServerHandler;
+    private UserInterface UI;
     public static void main(String[] args)
     {
-        String serverName = "ec2-18-207-150-67.compute-1.amazonaws.com";
-        int port = 8989;
-        ServerHandler ServerHandler;
-        UserInterface UI;
+        Main program = new Main();
+        program.StartProgram();
+    }
 
-        try (Socket socket = new Socket(serverName, port);
+    private void StartProgram()
+    {
+        try (Socket socket = new Socket(ServerName, Port);
              BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream())))
         {
             ServerHandler = new ServerHandler(socket);
@@ -34,10 +38,17 @@ public class Main
             String serverInput = reader.readLine();
             Message serverMessage = MessageFactory.parse(serverInput);
 
+            switch (serverMessage.type)
+            {
+                case "Chat":
+                    HandleChatMessage(serverMessage);
+                    break;
+                case "Start":
+                    break;
+            }
             if(serverMessage.type.equals("Chat"))
             {
-                ChatMessage chat = (ChatMessage)  serverMessage;
-                UI.AppendToTextArea(chat.chatMessage);
+
             }
             System.out.println(serverInput);
 
@@ -50,7 +61,13 @@ public class Main
         }
     }
 
-    public static String GetUserName()
+    private void HandleChatMessage(Message serverMessage)
+    {
+        ChatMessage chat = (ChatMessage)  serverMessage;
+        UI.AppendToTextArea(chat.chatMessage);
+    }
+
+    private static String GetUserName()
     {
         return JOptionPane.showInputDialog(new JFrame(), "Enter your name: ");
     }
