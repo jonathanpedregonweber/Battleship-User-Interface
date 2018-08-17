@@ -35,36 +35,16 @@ public class Main
             ServerHandler.SendLoginMessage(GetUserName());
             UI = new UserInterface(socket);
 
-
             String serverInput = reader.readLine();
-            Message serverMessage = MessageFactory.parse(serverInput);
-
-            switch (serverMessage.type)
-            {
-                case "Chat":
-                    HandleChatMessage(serverMessage);
-                    break;
-                case "Start":
-                    HandleStartMessage(serverMessage);
-                    break;
-                case "Hit":
-                    HandleHitMessage(serverMessage);
-                    break;
-                case "Move":
-                    HandleMoveMessage(serverMessage);
-                    break;
-                case "Win":
-                    HandleWinMessage();
-                    break;
-                default:
-                    System.out.println(serverInput);
-                    break;
-            }
-            if(serverMessage.type.equals("Chat"))
-            {
-
-            }
             System.out.println(serverInput);
+            try
+            {
+                ProcessServerMessage(serverInput);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Unable to process input from server. " + e.getMessage());
+            }
 
         } catch (UnknownHostException e)
         {
@@ -72,6 +52,33 @@ public class Main
         } catch (IOException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    private void ProcessServerMessage(String serverInput)
+    {
+        Message serverMessage = MessageFactory.parse(serverInput);
+
+        switch (serverMessage.type)
+        {
+            case "Chat":
+                HandleChatMessage(serverMessage);
+                break;
+            case "Start":
+                HandleStartMessage(serverMessage);
+                break;
+            case "Hit":
+                HandleHitMessage(serverMessage);
+                break;
+            case "Move":
+                HandleMoveMessage(serverMessage);
+                break;
+            case "Win":
+                HandleWinMessage();
+                break;
+            default:
+                System.out.println(serverInput);
+                break;
         }
     }
 

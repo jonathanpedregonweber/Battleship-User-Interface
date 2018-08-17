@@ -58,8 +58,6 @@ public class UserInterface extends JFrame
         {
             for(int column = 0; column < 10; column++)
             {
-                JButton playerButton = new JButton();
-
                 buttonArray[row][column] = new JButton();
                 JButton currentButton = buttonArray[row][column];
                 currentButton.setText(GetButtonText(column, row));
@@ -89,8 +87,16 @@ public class UserInterface extends JFrame
                 opponentButton.setText(GetButtonText(column, row));
                 opponentButton.setEnabled(false);
                 opponentButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 3));
+                opponentButton.setActionCommand(column + "_" + row);
+                opponentButton.addActionListener(e -> {
+                    Coordinates coordinates = new Coordinates(e.getActionCommand());
+                    JButton selectedButton = OpponentButtons[coordinates.YCoordinate][coordinates.XCoordinate];
+                    selectedButton.setBackground(Color.YELLOW);
+                    DisableOpponentButtons();
+                    ServerHandler.SendMoveMessage(coordinates.XCoordinate, coordinates.YCoordinate);
+                });
+                buttonArray[row][column] = opponentButton;
                 OpponentPanel.add(opponentButton);
-                buttonArray[row][column] = new JButton();
             }
         }
         PlayerGuessCoordinates = new Coordinates[100];
@@ -128,15 +134,21 @@ public class UserInterface extends JFrame
     {
         JPanel buttonPanel = new JPanel(new GridLayout(6,1));
         StartGameButton = new JButton("Start Game");
+        StartGameButton.setEnabled(false);
         StartGameButton.addActionListener(e ->
         {
             ServerHandler.SendStartMessage();
             StartGameButton.setEnabled(false);
-            RandomizeShipsButton.setEnabled(true);
+            RandomizeShipsButton.setEnabled(false);
+            EnableOpponentButtons();//normally I wouldn't enable these until I receive a start message but I'm
+            //not getting one right now.
         });
         RandomizeShipsButton = new JButton("Randomize Ships");
-        RandomizeShipsButton.setEnabled(false);
-        RandomizeShipsButton.addActionListener(e -> SetShips());
+        RandomizeShipsButton.addActionListener(e ->
+        {
+            SetShips();
+            StartGameButton.setEnabled(true);
+        });
         buttonPanel.add(StartGameButton);
         buttonPanel.add(RandomizeShipsButton);
         buttonPanel.setBorder(new LineBorder(Color.BLUE, 7));
@@ -145,6 +157,7 @@ public class UserInterface extends JFrame
 
     private void SetShips()
     {
+        //Eventually this would be actually randomized.
         ShipCoordinates = new Coordinates[17];
         //Carrier
         ShipCoordinates[0] = new Coordinates(0,0);
@@ -191,7 +204,7 @@ public class UserInterface extends JFrame
         int xCoordinate = buttonCoordinates.XCoordinate;
         int yCoordinate = buttonCoordinates.YCoordinate;
 
-        UserButtons[yCoordinate][xCoordinate].setBackground(Color.BLUE);
+        UserButtons[yCoordinate][xCoordinate].setBackground(buttonColor);
     }
 
     public void EnableOpponentButtons()
