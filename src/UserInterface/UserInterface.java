@@ -58,11 +58,13 @@ public class UserInterface extends JFrame
             for(int column = 0; column < 10; column++)
             {
                 JButton playerButton = new JButton();
-                playerButton.setText(GetButtonText(column, row));
-                playerButton.setEnabled(false);
-                playerButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 3));
-                UserPanel.add(playerButton);
+
                 buttonArray[row][column] = new JButton();
+                JButton currentButton = buttonArray[row][column];
+                currentButton.setText(GetButtonText(column, row));
+                currentButton.setEnabled(false);
+                currentButton.setBorder(new LineBorder(Color.LIGHT_GRAY, 3));
+                UserPanel.add(currentButton);
             }
         }
         return buttonArray;
@@ -144,10 +146,7 @@ public class UserInterface extends JFrame
         ShipCoordinates = new Coordinates[17];
         //Carrier
         ShipCoordinates[0] = new Coordinates(0,0);
-        UserButtons[0][0].setBackground(Color.BLUE);
-        UserButtons[0][0].setOpaque(true);
-        UserButtons[0][0].setBorderPainted(false);
-        UserButtons[0][0].setEnabled(true);
+
         ShipCoordinates[1] = new Coordinates(0,1);
         ShipCoordinates[2] = new Coordinates(0,2);
         ShipCoordinates[3] = new Coordinates(0,3);
@@ -173,12 +172,27 @@ public class UserInterface extends JFrame
         ShipCoordinates[15] = new Coordinates(10,3);
         ShipCoordinates[16] = new Coordinates(10,4);
 
+        for(Coordinates coordinates: ShipCoordinates)
+        {
+
+        }
     }
 
     public void AppendToTextArea(String text)
     {
         String currentText = ChatReceived.getText();
         ChatReceived.setText(currentText + text);
+    }
+
+    private void SelectUserButton(Coordinates buttonCoordinates)
+    {
+        int xCoordinate = buttonCoordinates.XCoordinate;
+        int yCoordinate = buttonCoordinates.YCoordinate;
+
+        UserButtons[yCoordinate][xCoordinate].setBackground(Color.BLUE);
+        UserButtons[yCoordinate][xCoordinate].setOpaque(true);
+        UserButtons[yCoordinate][xCoordinate].setBorderPainted(false);
+        UserButtons[yCoordinate][xCoordinate].setEnabled(true);
     }
 
 }
