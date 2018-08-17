@@ -129,6 +129,7 @@ public class UserInterface extends JFrame
     {
         JPanel buttonPanel = new JPanel(new GridLayout(6,1));
         StartGameButton = new JButton("Start Game");
+        StartGameButton.addActionListener(e -> ServerHandler.SendStartMessage());
         RandomizeShipsButton = new JButton("Randomize Ships");
         RandomizeShipsButton.setEnabled(false);
         buttonPanel.add(StartGameButton);
